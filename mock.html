@@ -1,0 +1,15 @@
+<!-- load demo environment -->
+<script src="https://demo.htmx.org"></script>
+<title>HTMX Mock</title>
+<!-- post to /foo -->
+<button hx-post="/foo" hx-target="#result">Count Up</button>
+<output id="result"></output>
+
+<!-- respond to /foo with some dynamic content in a template tag -->
+<script>
+  globalInt = 0;
+</script>
+<template url="/foo" delay="500">
+  <!-- note the url and delay attributes -->
+  ${globalInt++}
+</template>

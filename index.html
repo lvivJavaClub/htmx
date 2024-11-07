@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTMX Demo</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+      }
+      header,
+      footer {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .example {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+      }
+      .example h2 {
+        font-size: 1.2em;
+        margin-top: 0;
+      }
+      hr {
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>HTMX Demo Page</h1>
+      <h3>* - examples with console output</h3>
+    </header>
+
+    <!-- Joke Loader -->
+    <div class="example">
+      <h2>Joke Loader</h2>
+      <div hx-get="https://v2.jokeapi.dev/joke/Any?format=txt&safe-mode">
+        Load Jokes
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- AJAX Button -->
+    <div class="example">
+      <h2>AJAX Button with replace</h2>
+      <button hx-get="https://dummyjson.com/todos/1" hx-swap="outerHTML">
+        Click Me
+      </button>
+    </div>
+
+    <hr />
+
+    <!-- Prompt -->
+    <div class="example">
+      <h2>Prompt</h2>
+      <button
+        hx-delete="/account"
+        hx-prompt="Enter your account name to confirm deletion"
+      >
+        Delete My Account
+      </button>
+    </div>
+
+    <hr />
+
+    <!-- Custom Header -->
+    <div class="example">
+      <h2>Custom Header *</h2>
+      <button hx-get="/data" hx-headers='{"X-Custom-Header": "customValue"}'>
+        Fetch Data with Custom Header
+      </button>
+    </div>
+
+    <hr />
+
+    <!-- htmx Events -->
+    <div class="example">
+      <h2>htmx Events</h2>
+      <p>note: enable throttling in Network tab</p>
+      <!-- <script>
+        document.body.addEventListener('htmx:afterRequest', function (event) {
+          alert('Request completed!');
+        });
+      </script> -->
+
+      <button hx-get="https://dummyjson.com/todos/1">Get Data</button>
+    </div>
+
+    <hr />
+
+    <!-- Mouse Enter Trigger -->
+    <div class="example">
+      <h2>Mouse Enter Trigger *</h2>
+      <div hx-post="/mouse_entered" hx-trigger="mouseenter">
+        [Here Mouse, Mouse!]
+      </div>
+      <br />
+      <div hx-post="/mouse_entered" hx-trigger="mouseenter once">
+        [Here Mouse, Mouse! (once)]
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Live Search -->
+    <div class="example">
+      <h2>Live Search</h2>
+      <input
+        type="text"
+        name="q"
+        hx-get="https://dummyjson.com/posts/search"
+        hx-trigger="keyup delay:500ms changed"
+        hx-target="#search-results"
+        placeholder="Search..."
+      />
+      <div id="search-results"></div>
+    </div>
+
+    <hr />
+
+    <!-- Control Click Example -->
+    <div class="example">
+      <h2>Control Click *</h2>
+      <div hx-get="/clicked" hx-trigger="click[ctrlKey]">Control Click Me</div>
+    </div>
+
+    <hr />
+
+    <!-- Polling -->
+    <div class="example">
+      <h2>Polling Every 2 Seconds *</h2>
+      <!-- <div hx-get="/news" hx-trigger="every 2s">
+        News updates every 2 seconds
+      </div> -->
+    </div>
+
+    <hr />
+
+    <!-- Delayed Click with Spinner -->
+    <div class="example">
+      <h2>Delayed Click with Spinner</h2>
+      <p>note: enable throttling in Network tab</p>
+      <button hx-get="https://dummyjson.com/recipes/1">
+        Click Me!
+        <img
+          class="htmx-indicator"
+          src="/img/spinning-circles.svg"
+          alt="Loading..."
+        />
+      </button>
+    </div>
+
+    <hr />
+
+    <!-- Indicator Button -->
+    <div class="example">
+      <h2>Button with Custom GIF Indicator</h2>
+      <p>note: enable throttling in Network tab</p>
+      <button
+        hx-get="https://dummyjson.com/recipes/1"
+        hx-indicator="#indicator"
+      >
+        Click Me 2!
+      </button>
+      <img
+        id="indicator"
+        class="htmx-indicator"
+        style="width: 30px; height: 30px"
+        src="/img/spinner.gif"
+        alt="Loading..."
+      />
+    </div>
+
+    <hr />
+
+    <!-- Request Cancelation -->
+    <div class="example">
+      <h2>Request Cancelation *</h2>
+      <p>note: enable throttling in Network tab</p>
+      <button id="request-button" hx-post="/example">Issue Request</button>
+      <button onclick="htmx.trigger('#request-button', 'htmx:abort')">
+        Cancel Request
+      </button>
+    </div>
+
+    <!-- Form Validation -->
+    <div class="example">
+      <h2>Form with Validation *</h2>
+      <form hx-post="/store">
+        <input
+          id="title"
+          name="title"
+          type="text"
+          hx-post="/validate"
+          hx-trigger="change"
+          placeholder="Enter title"
+        />
+        <button type="submit">Submit</button>
+      </form>
+
+      <form hx-post="/store">
+        <input
+          id="title"
+          name="title"
+          type="text"
+          hx-post="/validate"
+          hx-trigger="change"
+          hx-sync="closest form:abort"
+        />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <hr />
+
+    <!-- Custom Form Validation Example -->
+    <div class="example">
+      <h2>Custom Validation Example</h2>
+      <form
+        title="Validation"
+        id="example-form"
+        hx-get="https://dummyjson.com/posts/1/comments"
+      >
+        <input
+          name="example"
+          onkeydown="this.setCustomValidity('')"
+          hx-on:htmx:validation:validate="if(this.value != 'foo') {
+                 this.setCustomValidity('Please enter the value foo');
+                 htmx.find('#example-form').reportValidity();
+               }"
+          placeholder="Type 'foo' to validate"
+        />
+      </form>
+    </div>
+
+    <hr />
+
+    <!-- Delete Account with Confirmation -->
+    <div class="example">
+      <h2>Delete with Confirmation</h2>
+      <button
+        hx-delete="/account"
+        hx-confirm="Are you sure you wish to delete your account?"
+      >
+        Delete My Account
+      </button>
+    </div>
+
+    <hr />
+
+    <!-- HTMX Boost Link -->
+    <div class="example">
+      <h2>Boosted Link *</h2>
+      <div hx-boost="true">
+        <a href="/blog">Blog</a>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Content Update with Morph -->
+    <div class="example">
+      <h2>Content Update with Morph</h2>
+      <button hx-post="/example" hx-swap="morph" hx-target="#content">
+        Update Content
+      </button>
+      <div id="content">Original Content</div>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 HTMX - Lviv JavaClub</p>
+    </footer>
+  </body>
+</html>
